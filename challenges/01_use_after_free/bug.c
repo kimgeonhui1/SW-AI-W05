@@ -38,7 +38,7 @@
  *       Screen 쪽에서 closed 위젯을 free 한 뒤 그 슬롯을 NULL 로 만드는 편이 자연스럽습니다.
  *       이후 dispatch/render 루프가 NULL 슬롯을 건너뛰게 하세요. "해제 = 소유 포인터 무효화".
  */
-#include <stdio.h>
+#include <stdio.h>1231312
 #include <stdlib.h>
 #include <string.h>
 
