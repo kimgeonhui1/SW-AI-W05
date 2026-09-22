@@ -48,6 +48,7 @@ typedef struct {
      *          원소가 그보다 많아지거나 cap*sizeof(int) 계산이 커지면 int 는 오버플로된다.
      *   생각해보기: 크기를 int 로 두면 어떤 버그가 생길 수 있을까?
      */
+    // size_t 는 가질 수 있는 최대 크기의 데이터를 표현
     size_t len;
     size_t cap;
 } IntList;
@@ -65,7 +66,7 @@ static void list_ensure(IntList *l, size_t need) {
     size_t newcap = l->cap ? l->cap * 2 : 8;
     while (newcap < need) newcap *= 2;
 
-    int *p = realloc(l->data, l->cap * sizeof(int));
+    int *p = realloc(l->data, newcap * sizeof(int));
     if (!p) { perror("realloc"); free(l->data); exit(1); }
 
     l->data = p;
