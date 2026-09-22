@@ -38,7 +38,7 @@
  *       Screen 쪽에서 closed 위젯을 free 한 뒤 그 슬롯을 NULL 로 만드는 편이 자연스럽습니다.
  *       이후 dispatch/render 루프가 NULL 슬롯을 건너뛰게 하세요. "해제 = 소유 포인터 무효화".
  */
-#include <stdio.h>1231312
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -127,7 +127,7 @@ static void screen_render(Screen *s) {
 static void dialog_on_event(Widget *self, int code) {
     if (code == 1) {
         self->closed = 1;
-        widget_destroy(self);   
+        // widget_destroy(self);   
     }
 }
 
@@ -158,14 +158,27 @@ int main(void) {
     screen_dispatch(&s, 1);
 
     /* TODO 닫힌(closed) 위젯을 여기서 정리(free + 해당 슬롯 NULL)할 필요가 있음 */
+    for (int i = 0; i < s.count; ) {
+    if (s.items[i]->closed) {
+        widget_destroy(s.items[i]);
+        for (int j = i; j < s.count - 1; j++) {
+            s.items[j] = s.items[j + 1];
+        }
+        s.count -=1 ;
+        s.items[s.count] = NULL;
+    } else {
+        i++;
+    }
+}
 
     char *status = app_build_status("dialog closed");
     printf("%s\n", status);
 
     printf("frame 2:\n");
-    screen_render(&s);           
+    screen_render(&s);        
 
     free(status);
+
     for (int i = 0; i < s.count; i++) free(s.items[i]);
     return 0;
 }
